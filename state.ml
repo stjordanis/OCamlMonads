@@ -19,8 +19,6 @@ module type S = sig
 end
 
 module Make(K : sig type t end) : (S with type state := K.t) = struct
-  type state = K.t
-
   module Run = struct
     type 'a t = K.t -> K.t * 'a
   end
