@@ -31,7 +31,7 @@ module Make(K : sig type t end) : (S with type state := K.t) = struct
   module Monad_instance = struct
     type 'a t = 'a Run.t
 
-    let pure (lazy a) =
+    let pure a =
       fun k -> (k, a)
 
     let bind f ma =

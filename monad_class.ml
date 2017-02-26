@@ -1,7 +1,7 @@
 module type S = sig
   type _ t
 
-  val pure : 'a Lazy.t -> 'a t
+  val pure : 'a -> 'a t
 
   val bind : ('a -> 'b t) -> 'a t -> 'b t
 end
@@ -12,8 +12,6 @@ module type EXTENSION = sig
   include S with type 'a t := 'a t
 
   val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
-
-  val ( >> ) : 'a t -> 'b t Lazy.t -> 'b t
 
   val join : 'a t t -> 'a t
 
@@ -26,9 +24,6 @@ module Extend(M : S) : (EXTENSION with type 'a t := 'a M.t) = struct
   let ( >>= ) m f =
     M.bind f m
 
-  let ( >> ) ma mb =
-    ma >>= fun _ -> Lazy.force mb
-
   let join maa =
     maa >>= fun ma -> ma
 
@@ -37,7 +32,7 @@ module Extend(M : S) : (EXTENSION with type 'a t := 'a M.t) = struct
       (fun ma ms ->
          ma >>= fun a ->
          ms >>= fun s ->
-         pure (lazy (a :: s)))
+         pure (a :: s))
       mas
-      (pure (lazy []))
+      (pure [])
 end
