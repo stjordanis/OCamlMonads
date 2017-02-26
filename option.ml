@@ -3,7 +3,7 @@ type 'a t = 'a option
 module Monad_instance : (Monad_class.S with type 'a t = 'a option) = struct
   type 'a t = 'a option
 
-  let pure (lazy a) =
+  let pure a =
     Some a
 
   let bind f = function

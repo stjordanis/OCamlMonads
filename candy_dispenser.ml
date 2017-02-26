@@ -35,7 +35,7 @@ let next input =
   let open Machine_state in
   let open Machine.Monad in
   Machine.get >>= fun s ->
-  if s.candies = 0 then pure (lazy ())
+  if s.candies = 0 then pure ()
   else
     match input with
   | Turn -> turn
